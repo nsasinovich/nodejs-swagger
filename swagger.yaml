@@ -1,0 +1,319 @@
+---
+swagger: "2.0"
+info:
+  description: "Homework 8 (deadline 12.12.17)\n[Repository on GitHub](https://github.com/lipskiy-aleh/nodeJs)\n"
+  version: "1.0.0"
+  title: "API for Mentoring"
+  contact:
+    email: "olipskiy777@gmail.com"
+host: "127.0.0.1:8000"
+basePath: "/api"
+tags:
+- name: "products"
+  description: "Manipulating with products"
+- name: "users"
+  description: "Manipulating with users"
+- name: "cities"
+  description: "Manipulating with cities"
+schemes:
+- "http"
+paths:
+  /products:
+    get:
+      tags:
+      - "products"
+      operationId: "productsGET"
+      parameters: []
+      responses:
+        200:
+          description: "Return ALL products"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+      x-swagger-router-controller: "Products"
+    post:
+      tags:
+      - "products"
+      operationId: "productsPOST"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "The name of new product"
+        required: true
+        type: "string"
+      - name: "brand"
+        in: "query"
+        description: "The name of new product's brand"
+        required: false
+        type: "string"
+      - name: "price"
+        in: "query"
+        description: "The price of new product"
+        required: false
+        type: "number"
+      - name: "color"
+        in: "query"
+        description: "The color of new product"
+        required: false
+        type: "string"
+      - name: "size"
+        in: "query"
+        description: "The size of new product"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Return created product"
+          schema:
+            $ref: "#/definitions/Product"
+      x-swagger-router-controller: "Products"
+  /products/{productId}:
+    get:
+      tags:
+      - "products"
+      operationId: "productsProductIdGET"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "Product ID for details"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Return product with corresponding Id"
+          schema:
+            $ref: "#/definitions/Product"
+      x-swagger-router-controller: "Products"
+    delete:
+      tags:
+      - "products"
+      operationId: "productsProductIdDELETE"
+      parameters:
+      - name: "productId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Product deleted successfully"
+        400:
+          description: "Wrong ID"
+        404:
+          description: "Product was not found"
+      x-swagger-router-controller: "Products"
+  /products/{productId}/reviews:
+    get:
+      tags:
+      - "products"
+      operationId: "productsProductIdReviewsGET"
+      parameters:
+      - name: "productId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Return ALL product's reviews"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Review"
+      x-swagger-router-controller: "Products"
+  /users:
+    get:
+      tags:
+      - "users"
+      operationId: "usersGET"
+      parameters: []
+      responses:
+        200:
+          description: "Return ALL users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+      x-swagger-router-controller: "Users"
+  /users/{userId}:
+    delete:
+      tags:
+      - "users"
+      operationId: "usersUserIdDELETE"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "User deleted successfully"
+        400:
+          description: "Wrong ID"
+        404:
+          description: "User was not found"
+      x-swagger-router-controller: "Users"
+  /cities:
+    get:
+      tags:
+      - "cities"
+      operationId: "citiesGET"
+      parameters: []
+      responses:
+        200:
+          description: "Return all cities"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/City"
+      x-swagger-router-controller: "Cities"
+    post:
+      tags:
+      - "cities"
+      operationId: "citiesPOST"
+      parameters:
+      - in: "body"
+        name: "data"
+        required: false
+        schema:
+          $ref: "#/definitions/City"
+      responses:
+        200:
+          description: "Return created city"
+          schema:
+            $ref: "#/definitions/City"
+      x-swagger-router-controller: "Cities"
+  /cities/{cityId}:
+    put:
+      tags:
+      - "cities"
+      operationId: "citiesCityIdPUT"
+      parameters:
+      - name: "cityId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "data"
+        required: false
+        schema:
+          $ref: "#/definitions/City"
+      responses:
+        200:
+          description: "Return updated (or created) city"
+          schema:
+            $ref: "#/definitions/City"
+      x-swagger-router-controller: "Cities"
+    delete:
+      tags:
+      - "cities"
+      operationId: "citiesCityIdDELETE"
+      parameters:
+      - name: "cityId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "City deleted successfully"
+        400:
+          description: "Wrong ID"
+        404:
+          description: "City was not found"
+      x-swagger-router-controller: "Cities"
+definitions:
+  ProductOptions:
+    type: "object"
+    properties:
+      color:
+        type: "string"
+        example: "gray"
+      size:
+        type: "string"
+        example: "XL"
+    example:
+      color: "gray"
+      size: "XL"
+  Product:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "Commom Jeans"
+      brand:
+        type: "string"
+        example: "China Mall"
+      price:
+        type: "integer"
+        example: "27.99"
+      options:
+        $ref: "#/definitions/ProductOptions"
+    example:
+      price: "27.99"
+      name: "Commom Jeans"
+      options:
+        color: "gray"
+        size: "XL"
+      brand: "China Mall"
+  Location:
+    type: "object"
+    properties:
+      lat:
+        type: "integer"
+        example: "30.5678"
+      long:
+        type: "integer"
+        example: "50.1234"
+    example:
+      lat: "30.5678"
+      long: "50.1234"
+  City:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Gomel"
+      capital:
+        type: "boolean"
+        example: false
+      country:
+        type: "string"
+        example: "Belarus"
+      location:
+        $ref: "#/definitions/Location"
+    example:
+      country: "Belarus"
+      capital: false
+      name: "Gomel"
+      location:
+        lat: "30.5678"
+        long: "50.1234"
+  Review:
+    type: "object"
+    properties:
+      productId:
+        type: "number"
+        example: 4
+      userId:
+        type: "number"
+        example: 2
+      review:
+        type: "string"
+        example: "The best purchase ever !!!!"
+    example:
+      productId: 4
+      review: "The best purchase ever !!!!"
+      userId: 2
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "John"
+      age:
+        type: "number"
+        example: 45
+    example:
+      name: "John"
+      age: 45
